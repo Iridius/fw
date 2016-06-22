@@ -73,7 +73,6 @@ public class Main extends Application {
 //                            .text("UserID: " + user.getUserID() + "\nFIO: " + user.getFio())
 //                            .showInformation();
 //                    try {
-//                        primaryStage.close();
 //                    } catch (Exception e1) {
 //                        e1.printStackTrace();
 //                    }
