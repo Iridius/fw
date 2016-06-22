@@ -1,41 +1,64 @@
 package sample;
 
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+import javafx.scene.control.MenuBar;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import org.controlsfx.control.Notifications;
+import org.controlsfx.control.StatusBar;
 
-public class Main extends Application {
+import java.io.IOException;
 
-    @Override
-    public void start(final Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        new Login();
+public class Main {
 
-        primaryStage.setTitle("Main form");
+    Main(User current_user) throws IOException {
+        //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
 
+        /* Основная форма */
+        Stage primaryStage = new Stage();
+        primaryStage.setTitle("fw");
+
+        /* Раскладка */
 //        GridPane grid = new GridPane();
-//        //grid.setGridLinesVisible(true);
 //        grid.setAlignment(Pos.CENTER);
 //        grid.setHgap(10);
 //        grid.setVgap(10);
 //        grid.setPadding(new Insets(25, 25, 25, 25));
+//        grid.setMinSize(800, 600);
+
+        Label lab1 = new Label("Пользователь:");
+//        grid.add(labUserName, 0, 1);
+
+        /* Главное меню */
+        MenuBar menu = MainMenu.create(current_user);
+
+        /* Панель статуса */
+        StatusBar statusBar = new StatusBar();
+        statusBar.getLeftItems().add(new Button(current_user.getFio()));
+        statusBar.getRightItems().add(new Label("v.0.0.1"));
+        statusBar.setText("");
+
+
+
+        BorderPane bottom = new BorderPane();
+        bottom.setPrefSize(800, 600);
+        bottom.setTop(menu);
+        bottom.setCenter(lab1);
+        bottom.setBottom(statusBar);
+        //bottom.setAlignment(statusBar, Pos.CENTER);
+
+
+
+
+
+        //statusBar.setProgress(.5);
+        //grid.getChildren().add(statusBar);
+
+//        AnchorPane.setBottomAnchor(statusBar, 0.0);
+//        AnchorPane.setLeftAnchor(statusBar, 0.0);
+//        AnchorPane.setRightAnchor(statusBar, 0.0);
+
 //
 //        Text scenetitle = new Text("Авторизация");
 //        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
@@ -88,15 +111,11 @@ public class Main extends Application {
 //            }
 //        });
 
-        primaryStage.setScene(new Scene(root, 800, 600));
+
+        primaryStage.setScene(new Scene(bottom, 800, 600));
         primaryStage.show();
 
 
 
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

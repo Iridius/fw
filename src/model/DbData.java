@@ -1,8 +1,9 @@
-package sample;
+package model;
 
-import org.controlsfx.control.Notifications;
-
+import sample.User;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class DbData {
     private static final String _userName = "lsterpusers";
@@ -47,21 +48,32 @@ public class DbData {
         return null;
     }
 
-//        try {
-//
-//            ResultSet rs = statement.executeQuery("SELECT * FROM dbo.Users");
-//
-//            int i = 0;
-//            while(rs.next()){
-//                i++;
-//            }
-//
-//            Notifications.create()
-//                    .title("Record recieved")
-//                    .text(String.valueOf(i))
-//                    .showInformation();
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+    public static Collection<UserForm> getUserForms(final int userID){
+        Collection<UserForm> result = new ArrayList<UserForm>();
+        String query = "SELECT\n" +
+                "   parent.name AS parentName,\n" +
+                "   f.name\n" +
+                "FROM dbo.FormsUser AS fu\n" +
+                "   JOIN dbo.Forms AS f ON f.id = fu.FormsID AND f.visible = 1\n" +
+                "   LEFT JOIN dbo.Forms AS parent ON parent.id = f.ParentID\n" +
+                "WHERE\n" +
+                "   fu.UserID = {UserID}" +
+                "ORDER BY\n" +
+                "   parent.id";
+        query = query.replace("{UserID}", Integer.toString(userID));
 
+        try {
+            ResultSet rs = getStatement().executeQuery(query);
+            while(rs.next()){
+                String parentItem = rs.getString("parentName");
+                String name = rs.getString("name");
+
+                result.add(new UserForm(parentItem, name));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }

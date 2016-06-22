@@ -15,13 +15,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.DbData;
 import org.controlsfx.control.Notifications;
 
 public class Login {
 
-    Stage loginStage;
+    public User user;
 
-    Login () throws Exception{
+    private Stage loginStage;
+
+    Login () throws Exception {
         loginStage = new Stage();
         loginStage.setTitle("Hello World");
 
@@ -60,7 +63,7 @@ public class Login {
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                User user = DbData.getCurrentUser(userTextField.getText(), pwBox.getText());
+                user = DbData.getCurrentUser(userTextField.getText(), pwBox.getText());
 
                 if (user != null) {
                     Notifications.create()
