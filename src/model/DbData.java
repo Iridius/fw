@@ -49,7 +49,7 @@ public class DbData {
     }
 
     public static Collection<UserForm> getUserForms(final int userID){
-        Collection<UserForm> result = new ArrayList<UserForm>();
+        Collection<UserForm> result = new ArrayList<>();
         String query = "SELECT\n" +
                 "   parent.name AS parentName,\n" +
                 "   f.name\n" +
@@ -59,7 +59,8 @@ public class DbData {
                 "WHERE\n" +
                 "   fu.UserID = {UserID}" +
                 "ORDER BY\n" +
-                "   parent.id";
+                "   parent.id," +
+                "   f.name";
         query = query.replace("{UserID}", Integer.toString(userID));
 
         try {
