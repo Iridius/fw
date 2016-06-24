@@ -1,14 +1,11 @@
-package sample;
+package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -17,6 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.DbData;
 import org.controlsfx.control.Notifications;
+import view.User;
 
 public class Login {
 
@@ -24,7 +22,7 @@ public class Login {
 
     private Stage loginStage;
 
-    Login () throws Exception {
+    public Login() {
         loginStage = new Stage();
         loginStage.setTitle("Hello World");
 
@@ -40,19 +38,34 @@ public class Login {
         scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
+         /* Каталог базы данных */
+        final Label labCatalog = new Label("Каталог базы данных:");
+        grid.add(labCatalog, 0, 1);
+
+        String current_catalog = DbData.getCatalog() != null ? DbData.getCatalog() : "LSTTEST";
+        final ComboBox txtCatalog = new ComboBox();
+        txtCatalog.setEditable(true);
+        txtCatalog.getItems().add(current_catalog);
+        if(!txtCatalog.getItems().isEmpty()){
+            txtCatalog.setValue(current_catalog);
+        }
+
+        grid.add(txtCatalog, 1, 1);
+
         /* Пользователь */
         Label labUserName = new Label("Пользователь:");
-        grid.add(labUserName, 0, 1);
+        grid.add(labUserName, 0, 2);
 
-        final TextField userTextField = new TextField();
-        grid.add(userTextField, 1, 1);
+        final TextField txtUser = new TextField();
+        txtUser.setText(DbData.getUser() != null ? DbData.getUser().getLogin() : "");
+        grid.add(txtUser, 1, 2);
 
         /* Пароль */
         Label pw = new Label("Пароль:");
-        grid.add(pw, 0, 2);
+        grid.add(pw, 0, 3);
 
-        final PasswordField pwBox = new PasswordField();
-        grid.add(pwBox, 1, 2);
+        final PasswordField txtPassword = new PasswordField();
+        grid.add(txtPassword, 1, 3);
 
         /* Войти */
         Button btn = new Button("Войти");
@@ -63,7 +76,9 @@ public class Login {
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                user = DbData.getCurrentUser(userTextField.getText(), pwBox.getText());
+                //DbData.init(txtCatalog.getText(), txtUser.getText(), txtPassword.getText());
+                DbData.init(txtCatalog.getSelectionModel().getSelectedItem().toString(), txtUser.getText(), txtPassword.getText());
+                user = DbData.getUser();
 
                 if (user != null) {
                     Notifications.create()
@@ -89,7 +104,8 @@ public class Login {
         grid.add(actiontarget, 1, 6);
 
         /* Итого  */
-        loginStage.setScene(new Scene(grid, 300, 275));
+        loginStage.setScene(new Scene(grid, 400, 300));
+        txtUser.requestFocus();
         loginStage.showAndWait();
     }
 }

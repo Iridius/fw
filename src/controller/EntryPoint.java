@@ -1,7 +1,8 @@
-package sample;
+package controller;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import view.User;
 
 public class EntryPoint extends Application {
 

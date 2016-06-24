@@ -1,15 +1,13 @@
-package sample;
+package controller;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import model.DbData;
 import model.UserForm;
+import view.User;
 
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.stream.Collectors;
 
 public class MainMenu extends MenuBar {
