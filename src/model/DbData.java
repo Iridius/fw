@@ -21,8 +21,6 @@ public class DbData {
     private static final String _url = "jdbc:sqlserver://{server};databaseName={catalog}";
     private static final String _driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 
-
-
     public static void init(final String catalog, final String login, final String password) {
         _catalog = catalog;
         _user = getUser(login, password);
@@ -55,14 +53,15 @@ public class DbData {
         query = query.replace("{UserID}", Integer.toString(userID));
 
         try {
-            ResultSet rs = getStatement().executeQuery(query);
-            while(rs.next()){
-                String parentItem = rs.getString("parentName");
-                String name = rs.getString("name");
+            try (ResultSet rs = getStatement().executeQuery(query)) {
+                while (rs.next()) {
+                    String parentItem = rs.getString("parentName");
+                    String name = rs.getString("name");
 
-                result.add(new UserForm(parentItem, name));
+                    result.add(new UserForm(parentItem, name));
+                }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -89,13 +88,13 @@ public class DbData {
 
         try {
             ResultSet rs = getStatement().executeQuery(query);
-            rs.next();
+            if(rs.next()){
+                int id = rs.getInt("id");
+                String fio = rs.getString("fio");
 
-            int id = rs.getInt("id");
-            String fio = rs.getString("fio");
-
-            return new User(login, id, fio);
-        } catch (SQLException e) {
+                return new User(login, id, fio);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

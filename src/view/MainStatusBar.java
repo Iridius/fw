@@ -1,13 +1,11 @@
 package view;
 
 import controller.IConfigurable;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import controller.Login;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import model.DbData;
 import org.controlsfx.control.StatusBar;
-import controller.Login;
 
 public class MainStatusBar implements IConfigurable {
     private static Button _btnCatalog;
@@ -21,12 +19,7 @@ public class MainStatusBar implements IConfigurable {
 
         /* Подключение к базе данных */
         _btnCatalog = new Button(DbData.getCatalog());
-        _btnCatalog.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Login login = new Login();
-            }
-        });
+        _btnCatalog.setOnAction(event -> new Login());
 
         statusBar.getLeftItems().add(_btnCatalog);
 
