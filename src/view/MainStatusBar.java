@@ -8,6 +8,7 @@ import model.DbData;
 import org.controlsfx.control.StatusBar;
 
 public class MainStatusBar implements IConfigurable {
+    private static Button _btnUser;
     private static Button _btnCatalog;
 
     public StatusBar create(User current_user) {
@@ -15,12 +16,12 @@ public class MainStatusBar implements IConfigurable {
         DbData.addObserver(this);
 
         /* Профиль пользователя */
-        statusBar.getLeftItems().add(new Button(current_user.getFio()));
+        _btnUser = new Button(current_user.getFio());
+        statusBar.getLeftItems().add(_btnUser);
 
         /* Подключение к базе данных */
         _btnCatalog = new Button(DbData.getCatalog());
         _btnCatalog.setOnAction(event -> new Login());
-
         statusBar.getLeftItems().add(_btnCatalog);
 
         /* Версия */
@@ -32,6 +33,7 @@ public class MainStatusBar implements IConfigurable {
 
     @Override
     public void run() {
+        _btnUser.setText(DbData.getUser().getFio());
         _btnCatalog.setText(DbData.getCatalog());
     }
 }
