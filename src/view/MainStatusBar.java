@@ -33,6 +33,7 @@ public class MainStatusBar implements IConfigurable {
 
     @Override
     public void run() {
+        /* Реакция полосы статуса на изменение глобальной конфигурации - каталога БД, пользователя */
         _btnUser.setText(DbData.getUser().getFio());
         _btnCatalog.setText(DbData.getCatalog());
     }
