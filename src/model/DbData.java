@@ -41,7 +41,8 @@ public class DbData {
         Collection<UserForm> result = new ArrayList<>();
         String query = "SELECT\n" +
                 "   parent.name AS parentName,\n" +
-                "   f.name\n" +
+                "   f.name,\n" +
+                "   f.viewName\n" +
                 "FROM dbo.FormsUser AS fu\n" +
                 "   JOIN dbo.Forms AS f ON f.id = fu.FormsID AND f.visible = 1\n" +
                 "   LEFT JOIN dbo.Forms AS parent ON parent.id = f.ParentID\n" +
@@ -57,8 +58,9 @@ public class DbData {
                 while (rs.next()) {
                     String parentItem = rs.getString("parentName");
                     String name = rs.getString("name");
+                    String viewName = rs.getString("viewName");
 
-                    result.add(new UserForm(parentItem, name));
+                    result.add(new UserForm(parentItem, name, viewName));
                 }
             }
         } catch (Exception e) {

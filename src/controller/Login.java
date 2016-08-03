@@ -48,11 +48,8 @@ public class Login {
         grid.add(scenetitle, 0, 0, 2, 1);
 
          /* Каталог базы данных */
-        //String current_catalog = DbData.getCatalog() != null ? DbData.getCatalog() : "LSTTEST";
         txtCatalog = new ComboBox<>();
         txtCatalog.setEditable(true);
-        //txtCatalog.getItems().add(current_catalog);
-        //txtCatalog.setValue(current_catalog);
         grid.add(new Label("Каталог базы данных:"), 0, 1);
         grid.add(txtCatalog, 1, 1);
 

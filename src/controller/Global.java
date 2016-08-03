@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 
 public class Global {
 
-    /* Create folder */
+    /* Создание каталога в операционной системе */
     public static void createFolder(String folder) {
         Path path = Paths.get(folder);
         try {
@@ -18,11 +18,13 @@ public class Global {
         }
     }
 
+    /* Проверка существования объекта (файла или папки) в операционной системе */
     public static boolean checkExists(String object) {
         File file = new File(object);
         return file.exists();
     }
 
+    /* Удаление объекта (файла или папки) из операционной системы */
     public static void delete(String object) {
         File file = new File(object);
         file.delete();

@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,19 +12,23 @@ public class Config {
     private final static String CASHED_USERS = "CashedUsers";
     private final static String DELIMITER = ";";
 
+    /* Добавление каталога баз данных в коллекцию (кэш) используемых */
     public static void addCatalog(String catalog) {
         add(CASHED_CATALOGS, catalog, false);
     }
 
+    /* Коллекция (кэш) ранее используемых баз данных */
     public static Collection<String> getCatalogs() {
         String cashedCatalog = get(CASHED_CATALOGS);
         return split(cashedCatalog);
     }
 
+    /* Добавление пользователя в коллекцию (кэш) авторизованных пользователей */
     public static void addUsers(String login) {
         add(CASHED_USERS, login, false);
     }
 
+    /* Коллекция (кэш) пользователей, успешно авторизовавшихся ранее */
     public static Collection<String> getUsers(){
         String cashedUsers = get(CASHED_USERS);
         return split(cashedUsers);
@@ -43,7 +46,7 @@ public class Config {
 
     private static String get(final String path) {
         Properties properties = new Properties();
-        FileInputStream fis = null;
+        FileInputStream fis;
 
         File config = getConfig();
 
