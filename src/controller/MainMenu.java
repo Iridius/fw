@@ -8,11 +8,9 @@ import javafx.scene.control.MenuItem;
 import model.DbData;
 import model.UserForm;
 import org.controlsfx.control.Notifications;
+import view.Main;
 import view.User;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -31,6 +29,7 @@ public class MainMenu extends MenuBar {
 
             forms.stream().filter(form -> form.parentItem.equals(item)).forEach(form -> {
                 MenuItem mi_child = new MenuItem(form.item);
+                mi_child.setId(form.viewName);
                 mi_child.setOnAction(mi_child_Click);
                 mi.getItems().add(mi_child);
             });
@@ -43,22 +42,20 @@ public class MainMenu extends MenuBar {
 
     /* Активация пункта меню */
     static EventHandler<ActionEvent> mi_child_Click = event -> {
-        final String menuName = ((MenuItem)event.getSource()).getText();
-        final String viewName = getViewName(menuName);
-        final String appPath = System.getProperty("user.dir");
+        final UserForm form = getUserForm(((MenuItem) event.getSource()).getId());
 
-        File viewFile = Paths.get(appPath, viewName + ".xml").toFile();
-        if(!viewFile.exists() || !viewFile.isFile()){
-            Notifications.create().title("file not exists").text("file not exists:\n" + viewFile.getAbsolutePath()).showError();
+        if(form.getFilePath() != null){
+            System.out.println(form.getFilePath());
+            Main.showForm(form);
         } else{
-            System.out.println(viewFile.getAbsolutePath());
+            Notifications.create().title("file not exists").text("file not exists:\n" + form.getFilePath()).showError();
         }
     };
 
-    private static String getViewName(final String menuName) {
+    private static UserForm getUserForm(String viewName) {
         for(UserForm form: forms){
-            if(form.item.equals(menuName)){
-                return form.viewName;
+            if(form.viewName.equals(viewName)){
+                return form;
             }
         }
 
