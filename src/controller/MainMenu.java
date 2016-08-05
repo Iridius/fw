@@ -45,7 +45,6 @@ public class MainMenu extends MenuBar {
         final UserForm form = getUserForm(((MenuItem) event.getSource()).getId());
 
         if(form.getViewName() != null){
-            System.out.println(form.getViewName());
             Main.showForm(form);
         } else{
             Notifications.create().title("file not exists").text("file not exists:\n" + form.getViewName()).showError();

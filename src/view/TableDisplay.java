@@ -16,7 +16,7 @@ public class TableDisplay {
         tab.setText(form.getItem());
         tab.setId(form.getViewName());
         tab.setOnClosed(event -> {
-            if (tab.getTabPane().getTabs().size() == 0) {
+            if (tab.getTabPane() != null) {
                 tab.getTabPane().setVisible(false);
             }
         });
