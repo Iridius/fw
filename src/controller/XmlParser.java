@@ -50,10 +50,6 @@ public class XmlParser {
         return result;
     }
 
-//    public String get(String paramName) {
-//        return _file.get(paramName);
-//    }
-
     private static HashMap<String, String> getNodes(Node node, String parentPrefix){
         HashMap<String, String> result = new HashMap<>();
         result.putAll(addCurrentNode(node, parentPrefix));

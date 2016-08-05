@@ -1,5 +1,6 @@
 package model;
 
+import controller.Global;
 import controller.IConfigurable;
 import view.User;
 import java.sql.*;
@@ -60,11 +61,15 @@ public class DbData {
                     String name = rs.getString("name");
                     String viewName = rs.getString("viewName");
 
-                    result.add(new UserForm(parentItem, name, viewName));
+                    result.add(
+                        new UserForm()
+                            .addMenu(parentItem, name)
+                            .addView(viewName)
+                    );
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.print("Не удалось добавить вид в приложение.");
         }
 
         return result;

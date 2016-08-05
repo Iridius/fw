@@ -22,14 +22,14 @@ public class MainMenu extends MenuBar {
         MenuBar result = new MenuBar();
 
         forms = DbData.getUserForms(current_user.getUserID());
-        Collection<String> topItems = forms.stream().map(form -> form.parentItem).collect(Collectors.toSet());
+        Collection<String> topItems = forms.stream().map(form -> form.getParentItem()).collect(Collectors.toSet());
 
         for(String item: topItems){
             Menu mi = new Menu(item);
 
-            forms.stream().filter(form -> form.parentItem.equals(item)).forEach(form -> {
-                MenuItem mi_child = new MenuItem(form.item);
-                mi_child.setId(form.viewName);
+            forms.stream().filter(form -> form.getParentItem().equals(item)).forEach(form -> {
+                MenuItem mi_child = new MenuItem(form.getItem());
+                mi_child.setId(form.getViewName());
                 mi_child.setOnAction(mi_child_Click);
                 mi.getItems().add(mi_child);
             });
@@ -44,17 +44,17 @@ public class MainMenu extends MenuBar {
     static EventHandler<ActionEvent> mi_child_Click = event -> {
         final UserForm form = getUserForm(((MenuItem) event.getSource()).getId());
 
-        if(form.getFilePath() != null){
-            System.out.println(form.getFilePath());
+        if(form.getViewName() != null){
+            System.out.println(form.getViewName());
             Main.showForm(form);
         } else{
-            Notifications.create().title("file not exists").text("file not exists:\n" + form.getFilePath()).showError();
+            Notifications.create().title("file not exists").text("file not exists:\n" + form.getViewName()).showError();
         }
     };
 
     private static UserForm getUserForm(String viewName) {
         for(UserForm form: forms){
-            if(form.viewName.equals(viewName)){
+            if(form.getViewName().equals(viewName)){
                 return form;
             }
         }
