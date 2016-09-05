@@ -71,18 +71,22 @@ public class ControlPanel extends HBox {
                 for(int i=0 ; i<rs.getMetaData().getColumnCount(); i++){
                     //We are using non property style for making dynamic table
                     final int j = i;
-                    TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i+1));
-                    col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList,String>,ObservableValue<String>>(){
-                        public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                            if(param.getValue().get(j) != null){
-                                return new SimpleStringProperty(param.getValue().get(j).toString());
+                    //TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i+1));
+                    //TableColumn col = _table.getColumns().
+                    TableColumn col = getColumn(_table, rs.getMetaData().getColumnName(i+1));
+                    if(col != null) {
+                        col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+                            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                                if (param.getValue().get(j) != null) {
+                                    return new SimpleStringProperty(param.getValue().get(j).toString());
+                                }
+
+                                return new SimpleStringProperty("");
                             }
+                        });
 
-                            return new SimpleStringProperty("");
-                        }
-                    });
-
-                    _table.getColumns().addAll(col);
+                        //_table.getColumns().addAll(col);
+                    }
                 }
 
                 /********************************
@@ -108,4 +112,16 @@ public class ControlPanel extends HBox {
             //_table.setItems(data);
         }
     };
+
+    private TableColumn getColumn(TableView table, String columnName) {
+        for(Object column: table.getColumns()){
+            if(((TableColumn)column).getId().equals(columnName.toLowerCase())){
+                return (TableColumn)column;
+            }
+        }
+
+        return null;
+
+        //return (TableColumn)_table.getColumns().get(_table.getColumns().indexOf(columnName));
+    }
 }

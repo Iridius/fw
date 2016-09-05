@@ -18,7 +18,7 @@ public class TableDisplay {
         /* Сетка таблицы */
         _table = new TableView();
         _table.setEditable(true);
-        //_table.getColumns().addAll(getTableColumns(form));
+        _table.getColumns().addAll(getTableColumns(form));
 
         /* Заголовок, фильтры, элементы управления */
         VBox box = new VBox();
@@ -54,6 +54,7 @@ public class TableDisplay {
 
             TableColumn<UserFormColumn, String> column = new TableColumn<>();
             column.setCellValueFactory(new PropertyValueFactory(form_column.get("key")));
+            column.setId(form_column.get("key"));
             column.setVisible(form_column.getVisible());
             column.setGraphic(label);
             columns.add(column);
