@@ -1,16 +1,36 @@
 package view;
 
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import model.UserForm;
 import model.UserFormColumn;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class TableDisplay {
-    public static Tab create(UserForm form) {
+    private TableView _table;
+
+    public Tab create(UserForm form) {
+        /* Сетка таблицы */
+        _table = new TableView();
+        _table.setEditable(true);
+        //_table.getColumns().addAll(getTableColumns(form));
+
+        /* Заголовок, фильтры, элементы управления */
+        VBox box = new VBox();
+        box.setPadding(new Insets(5, 5, 5, 5));
+        box.setSpacing(5);
+        box.getChildren().addAll(new FilterPanel(form), new ControlPanel(_table, form));
+
+        /* Рабочая область формы */
+        BorderPane pane = new BorderPane();
+        pane.setTop(box);
+        pane.setCenter(_table);
+
         /* Вкладка с табличным представлением */
         Tab tab = new Tab();
         tab.setText(form.getItem());
@@ -20,11 +40,7 @@ public class TableDisplay {
                 tab.getTabPane().setVisible(false);
             }
         });
-
-        /* Сетка таблицы */
-        TableView table = new TableView();
-        table.getColumns().addAll(getTableColumns(form));
-        tab.setContent(table);
+        tab.setContent(pane);
 
         return tab;
     }
@@ -33,10 +49,14 @@ public class TableDisplay {
         Collection<TableColumn> columns = new ArrayList<>();
 
         for(UserFormColumn form_column: form.getColumns()){
-            TableColumn column = new TableColumn(form_column.get("caption"));
-            column.setVisible(Boolean.valueOf(getValue(form_column.get("visible"), "true")));
-            columns.add(column);
+            Label label = new Label(form_column.getCaption());
+            label.setTooltip(new Tooltip(form_column.getTooltip()));
 
+            TableColumn<UserFormColumn, String> column = new TableColumn<>();
+            column.setCellValueFactory(new PropertyValueFactory(form_column.get("key")));
+            column.setVisible(form_column.getVisible());
+            column.setGraphic(label);
+            columns.add(column);
         }
 
         return columns;

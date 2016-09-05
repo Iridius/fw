@@ -11,7 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserForm {
-    private static final String REGEX = "\\((.+)\\)\\.(.+)";
+    private static final String ATTRIBUTE_REGEX = ".+\\.(.+)";
+    private static final String COLUMN_REGEX = "\\((.+)\\)\\.(.+)";
 
     private String _parentItem;
     private String _item;
@@ -19,6 +20,15 @@ public class UserForm {
     private File _file;
 
     private Collection<UserFormColumn> _columns;
+    private HashMap<String, String> _attributes;
+
+    public UserForm(String viewName){
+        _viewName = viewName;
+
+        if(_viewName != null) {
+            _file = Global.getFile(_viewName);
+        }
+    }
 
     public UserForm addMenu(String parent, String item){
         _parentItem = parent;
@@ -27,16 +37,43 @@ public class UserForm {
         return this;
     }
 
-    public UserForm addView(String viewName){
-        _viewName = viewName;
-        if(_viewName != null) {
-            _file = Global.getFile(viewName);
-        }
+    public UserForm addView(){
         if(_file != null) {
             _columns = getColumns();
         }
 
         return this;
+    }
+
+    public UserForm addAttributes(){
+        if(_file != null) {
+            _attributes = getAttributes();
+        }
+
+        return this;
+    }
+
+    private HashMap<String, String> getAttributes() {
+        if(_attributes != null){
+            return _attributes;
+        }
+
+        _attributes = new HashMap<>();
+        if(_file == null){
+            return _attributes;
+        }
+
+        HashMap<String, String> properties = XmlParser.parse(_file);
+        Pattern pattern = Pattern.compile(ATTRIBUTE_REGEX);
+
+        for(String key: properties.keySet()){
+            Matcher matcher = pattern.matcher(key);
+            if(matcher.find()){
+                _attributes.put(matcher.group(1).toLowerCase(), properties.get(key));
+            }
+        }
+
+        return _attributes;
     }
 
     public Collection<UserFormColumn> getColumns(){
@@ -51,7 +88,7 @@ public class UserForm {
 
         String gridLayout = XmlParser.parse(_file).get(Global.TAG_GRID_LAYOUT_XML);
         HashMap<String, String> columns = XmlParser.parse(gridLayout);
-        Pattern pattern = Pattern.compile(REGEX);
+        Pattern pattern = Pattern.compile(COLUMN_REGEX);
 
         for(String key: columns.keySet()){
             Matcher matcher = pattern.matcher(key);
@@ -97,5 +134,9 @@ public class UserForm {
 
     public String getViewName() {
         return _viewName;
+    }
+
+    public String getReadProc() {
+        return _attributes.get("readproc");
     }
 }

@@ -46,13 +46,17 @@ public class Main {
         pane.setCenter(workspace);
         pane.setBottom(statusBar);
 
-        primaryStage.setScene(new Scene(pane, 800, 600));
+
+        Scene scene = new Scene(pane, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("../style.css").toExternalForm());
+
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     /* Показ сущности базы данных в табличном виде */
     public static void showForm(final UserForm form){
-        Tab tab = TableDisplay.create(form);
+        Tab tab = new TableDisplay().create(form);
         _tabPane.getTabs().add(tab);
 
         if(!_tabPane.isVisible()){

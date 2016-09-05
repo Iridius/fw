@@ -62,20 +62,22 @@ public class DbData {
                     String viewName = rs.getString("viewName");
 
                     result.add(
-                        new UserForm()
+                        new UserForm(viewName)
                             .addMenu(parentItem, name)
-                            .addView(viewName)
+                            .addView()
+                            .addAttributes()
                     );
                 }
             }
         } catch (Exception e) {
             System.err.print("Не удалось добавить вид в приложение.");
+            e.printStackTrace();
         }
 
         return result;
     }
 
-    private static Statement getStatement() {
+    public static Statement getStatement() {
         try {
             Class.forName(_driver);
             final String current_url = _url.replace("{server}", _server).replace("{catalog}", _catalog);
